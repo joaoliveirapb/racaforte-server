@@ -1,0 +1,22 @@
+version: '3.8'
+
+services:
+  postgres_db:
+    image: bitnami/postgresql:17.2.0
+    container_name: racaforte-db
+    ports:
+      - '5432:5432'
+    env_file:
+      - .env
+    volumes:
+      - racaforte-db-data:/bitnami/postgresql
+    networks:
+      - racaforte_network
+
+volumes:
+  racaforte-db-data:
+    driver: local
+
+networks:
+  racaforte_network:
+    driver: bridge

@@ -1,0 +1,70 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum PartCondition {
+  BOA
+  MÉDIA
+  RUIM
+
+  @@map("part_condition")
+}
+
+model Part {
+  id              String        @id @default(cuid())
+  name            String
+  description     String        @db.Text
+  condition       PartCondition
+  stock_address   String
+  dimensions      Json? // {width, height, depth, unit}
+  weight          Decimal?      @db.Decimal(5, 2)
+  compatibility   Json? // [{ "brand": "Marca", "model": "Modelo", "year": "Ano" }]
+  min_price       Decimal?      @db.Decimal(10, 2)
+  suggested_price Decimal?      @db.Decimal(10, 2)
+  max_price       Decimal?      @db.Decimal(10, 2)
+  ad_title        String?       @db.Text
+  ad_description  String?       @db.Text
+  images          PartImage[]
+  created_at      DateTime      @default(now())
+  updated_at      DateTime      @updatedAt
+
+  car_id String
+  car    Car    @relation(fields: [car_id], references: [id])
+
+  @@map("parts")
+}
+
+model PartImage {
+  id         String   @id @default(cuid())
+  filename   String   @unique
+  url        String
+  mimetype   String?
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  part_id String
+  part    Part   @relation(fields: [part_id], references: [id], onDelete: Cascade)
+
+  @@index([part_id])
+  @@map("part_images")
+}
+
+model Car {
+  id          String   @id @default(cuid())
+  internal_id String   @unique
+  brand       String
+  model       String
+  year        Int
+  color       String
+  part        Part[]
+  created_at  DateTime @default(now())
+  updated_at  DateTime @updatedAt
+
+  @@map("cars")
+}
