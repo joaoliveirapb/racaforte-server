@@ -11,7 +11,8 @@
     "docker:stop": "docker compose stop",
     "prisma:generate": "prisma generate",
     "prisma:migrate": "prisma migrate dev",
-    "prisma:studio": "prisma studio"
+    "prisma:studio": "prisma studio",
+    "seed": "tsx prisma/seed.ts"
   },
   "keywords": [],
   "author": "",
