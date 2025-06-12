@@ -2,6 +2,7 @@ import { openai } from '../lib/openai'
 import { PrismaCarsRepository } from '../repositories/prisma/prisma-cars.repository'
 import { AIService } from '../services/ai.service'
 import { CreateCarUseCase } from '../use-cases/create-car.use-case'
+import { DeleteCarUseCase } from '../use-cases/delete-car.use-case'
 import { IdentifyPartUseCase } from '../use-cases/identify-part.use-case'
 
 export class UseCaseFactory {
@@ -19,5 +20,13 @@ export class UseCaseFactory {
     const createCarUseCase = new CreateCarUseCase(carsRepository)
 
     return createCarUseCase
+  }
+
+  static makeDeleteCarUseCase(): DeleteCarUseCase {
+    const carsRepository = new PrismaCarsRepository()
+
+    const deleteCarUseCase = new DeleteCarUseCase(carsRepository)
+
+    return deleteCarUseCase
   }
 }
