@@ -1,9 +1,17 @@
 import { fastifyCors } from '@fastify/cors'
 import { fastifyMultipart } from '@fastify/multipart'
 import { fastify } from 'fastify'
+import {
+  type ZodTypeProvider,
+  serializerCompiler,
+  validatorCompiler,
+} from 'fastify-type-provider-zod'
 import { appRoutes } from './routes'
 
-const app = fastify()
+const app = fastify().withTypeProvider<ZodTypeProvider>()
+
+app.setValidatorCompiler(validatorCompiler)
+app.setSerializerCompiler(serializerCompiler)
 
 app.register(fastifyCors, {
   origin: '*',
